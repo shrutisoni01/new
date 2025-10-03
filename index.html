@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Boyfriend’s Day ❤️</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    background: linear-gradient(135deg, #ff758c, #ff7eb3);
+    color: #fff;
+    overflow-x: hidden;
+  }
+  #start, #countdown, #heart, #reasons, #quiz, #gallery, #final {
+    display: none;
+  }
+  button {
+    background: #ff4f81;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 25px;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-top: 20%;
+    transition: 0.3s;
+  }
+  button:hover { background: #e6005c; }
+
+  /* Countdown */
+  #countdown {
+    font-size: 5rem;
+    margin-top: 20%;
+    animation: pop 1s infinite;
+  }
+  @keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+  }
+
+  /* Heart Animation */
+  .heart {
+    width: 100px;
+    height: 100px;
+    background: red;
+    position: relative;
+    margin: 100px auto;
+    transform: rotate(-45deg);
+    animation: beat 1s infinite;
+  }
+  .heart::before,
+  .heart::after {
+    content: "";
+    width: 100px;
+    height: 100px;
+    background: red;
+    border-radius: 50%;
+    position: absolute;
+  }
+  .heart::before { top: -50px; left: 0; }
+  .heart::after { left: 50px; top: 0; }
+  @keyframes beat {
+    0%, 100% { transform: scale(1) rotate(-45deg); }
+    50% { transform: scale(1.2) rotate(-45deg); }
+  }
+
+  .message {
+    display: none;
+    font-size: 1.3rem;
+    background: rgba(0,0,0,0.3);
+    padding: 20px;
+    border-radius: 15px;
+    width: 70%;
+    margin: auto;
+  }
+
+  /* Reasons Slideshow */
+  #reasons {
+    font-size: 1.5rem;
+    margin-top: 15%;
+  }
+  #reasonText {
+    background: rgba(0,0,0,0.3);
+    padding: 20px;
+    border-radius: 15px;
+    width: 70%;
+    margin: auto;
+    font-size: 1.3rem;
+    animation: fadeIn 1s;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Gallery Slideshow */
+  #gallery {
+    position: relative;
+    margin-top: 5%;
+  }
+  .gallery img {
+    width: 250px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+  }
+  .gallery img.active {
+    opacity: 1;
+  }
+
+  /* Final Text */
+  #final h1 {
+    font-size: 2.8rem;
+    margin-top: 20%;
+    animation: glow 2s infinite alternate;
+  }
+  @keyframes glow {
+    from { text-shadow: 0 0 10px #fff; }
+    to { text-shadow: 0 0 30px #ff6ec7, 0 0 50px #ff6ec7; }
+  }
+
+  canvas {
+    position: fixed;
+    top:0;left:0;
+    width:100%;height:100%;
+    pointer-events:none;
+  }
+</style>
+</head>
+<body>
+
+<!-- Start -->
+<div id="start">
+  <button onclick="begin()">💝 Start Surprise</button>
+</div>
+
+<!-- Countdown -->
+<div id="countdown"></div>
+
+<!-- Heart Message -->
+<div id="heart" onclick="showMessage()">
+  <div class="heart"></div>
+  <div class="message" id="loveMsg">
+    My Love ❤️, <br>
+    You make my world brighter, my days happier, and my heart fuller 💕.<br>
+    On Boyfriend’s Day, I just want to say — I love you endlessly 💘✨.
+  </div>
+</div>
+
+<!-- Reasons Slideshow -->
+<div id="reasons">
+  <h2>💖 Reasons Why I Love You 💖</h2>
+  <p id="reasonText"></p>
+</div>
+
+<!-- Quiz -->
+<div id="quiz">
+  <h2>Do you want to see our memories? 😍</h2>
+  <button onclick="showGallery()">Yes 💕</button>
+  <button onclick="showGallery()">Of course 💘</button>
+</div>
+
+<!-- Gallery Slideshow -->
+<div id="gallery">
+  <h2>📸 Our Beautiful Memories</h2>
+  <div class="gallery">
+    <img src="photo1.jpg" class="active" alt="Memory 1">
+    <img src="photo2.jpg" alt="Memory 2">
+    <img src="photo3.jpg" alt="Memory 3">
+    <img src="photo4.jpg" alt="Memory 4">
+  </div>
+</div>
+
+<!-- Final -->
+<div id="final">
+  <h1>💖 Happy Boyfriend’s Day, My Love 💕</h1>
+</div>
+
+<!-- Music -->
+<audio id="song" src="romantic.mp3" loop></audio>
+<canvas id="confetti"></canvas>
+
+<script>
+  // Start
+  window.onload = () => {
+    document.getElementById("start").style.display = "block";
+  }
+
+  function begin() {
+    document.getElementById("start").style.display = "none";
+    document.getElementById("countdown").style.display = "block";
+    let count = 3;
+    const timer = setInterval(() => {
+      document.getElementById("countdown").innerText = count;
+      count--;
+      if (count < 0) {
+        clearInterval(timer);
+        document.getElementById("countdown").style.display = "none";
+        document.getElementById("heart").style.display = "block";
+      }
+    }, 1000);
+  }
+
+  function showMessage() {
+    document.getElementById("loveMsg").style.display = "block";
+    setTimeout(() => {
+      document.getElementById("heart").style.display = "none";
+      showReasons();
+    }, 4000);
+  }
+
+  // Reasons Slideshow
+  const reasons = [
+    "You always make me laugh, no matter what 💕",
+    "You support me in everything I do ✨",
+    "You care for me more than I ever imagined ❤️",
+    "You make ordinary moments magical 💫",
+    "Because... you’re simply YOU 😍"
+  ];
+  let reasonIndex = 0;
+
+  function showReasons() {
+    document.getElementById("reasons").style.display = "block";
+    showNextReason();
+  }
+
+  function showNextReason() {
+    if (reasonIndex < reasons.length) {
+      document.getElementById("reasonText").innerText = reasons[reasonIndex];
+      reasonIndex++;
+      setTimeout(showNextReason, 2000);
+    } else {
+      document.getElementById("reasons").style.display = "none";
+      document.getElementById("quiz").style.display = "block";
+    }
+  }
+
+  // Quiz -> Gallery
+  let slideIndex = 0;
+  function showGallery() {
+    document.getElementById("quiz").style.display = "none";
+    document.getElementById("gallery").style.display = "block";
+    document.getElementById("song").play();
+    startConfetti();
+    slideshow();
+  }
+
+  function slideshow() {
+    const slides = document.querySelectorAll(".gallery img");
+    slides.forEach(img => img.classList.remove("active"));
+    slides[slideIndex].classList.add("active");
+    slideIndex = (slideIndex + 1) % slides.length;
+    if (slideIndex !== 0) {
+      setTimeout(slideshow, 2000);
+    } else {
+      setTimeout(() => {
+        document.getElementById("gallery").style.display = "none";
+        document.getElementById("final").style.display = "block";
+      }, 2000);
+    }
+  }
+
+  // Confetti
+  const canvas = document.getElementById('confetti');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  let confetti = [];
+
+  function randomColor() {
+    const colors = ['#ff4f81','#ff99cc','#ff0066','#ff3366'];
+    return colors[Math.floor(Math.random() * colors.length)];
+  }
+
+  function createConfetti() {
+    return {
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      r: Math.random() * 8 + 4,
+      d: Math.random() * 100,
+      color: randomColor(),
+      tilt: Math.floor(Math.random() * 10) - 10,
+      tiltAngleIncremental: Math.random() * 0.07 + 0.05,
+      tiltAngle: 0
+    };
+  }
+
+  function drawConfetti(c) {
+    ctx.beginPath();
+    ctx.fillStyle = c.color;
+    ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2, true);
+    ctx.fill();
+  }
+
+  function updateConfetti(c) {
+    c.tiltAngle += c.tiltAngleIncremental;
+    c.y += (Math.cos(c.d) + 3 + c.r / 2) / 2;
+    c.x += Math.sin(c.d);
+    if (c.y > canvas.height) {
+      c.x = Math.random() * canvas.width;
+      c.y = -20;
+    }
+  }
+
+  function render() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    confetti.forEach((c, i) => {
+      drawConfetti(c);
+      updateConfetti(c);
+    });
+    requestAnimationFrame(render);
+  }
+
+  function startConfetti() {
+    confetti = [];
+    for (let i = 0; i < 120; i++) {
+      confetti.push(createConfetti());
+    }
+    render();
+  }
+</script>
+</body>
+</html>
